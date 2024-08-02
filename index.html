@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html = style="height: 100%;">
+  <head>
+    <title>Hogsback Adventure Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="scripts/leaflet.css">
+    <script src="scripts/leaflet.js"></script>
+    <script src="scripts/papaparse.min.js"></script>
+  </head>
+  <body style="height: 100%;margin: 0;">
+    <div id="map" style="width: 100vw; height: 100%; background: #000000;"></div>
+    <script type="text/javascript">
+
+  //Creating the Map
+    var map = L.map('map').setView([0, 0], 0);
+    L.tileLayer('map/{z}/{x}/{y}.png', {
+      continuousWorld: false,
+      noWrap: true,  
+      minZoom: 3,
+      maxZoom: 5,
+    }).addTo(map);
+  //Coordinate Finder
+    var marker = L.marker([0, 0], {
+      draggable: true,
+    }).addTo(map);
+    marker.bindPopup('LatLng Marker').openPopup();
+    marker.on('dragend', function(e) {
+      marker.getPopup().setContent(marker.getLatLng().toString()).openOn(map);
+    });
+
+ // Load markers from CSV file
+ Papa.parse('markers.csv', {
+  download: true,
+  header: true,
+  complete: function(results) {
+    var markers = results.data;
+    markers.forEach(function(markerData) {
+      var icon = L.icon({
+        iconUrl: markerData.iconUrl,
+        iconRetinaUrl: markerData.iconRetinaUrl,
+        shadowUrl: markerData.shadowUrl,
+        iconSize: [markerData.iconSizeX, markerData.iconSizeY],
+        iconAnchor: [markerData.iconAnchorX, markerData.iconAnchorY],
+        popupAnchor: [markerData.popupAnchorX, markerData.popupAnchorY],
+        tooltipAnchor: [markerData.tooltipAnchorX, markerData.tooltipAnchorY],
+        shadowSize: [markerData.shadowSizeX, markerData.shadowSizeY]
+      });
+      var marker = L.marker([markerData.lat, markerData.lng], { icon: icon }).bindPopup(markerData.popupContent).addTo(map);
+    });
+  }
+});
+
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,2 @@
+iconUrl,iconRetinaUrl,shadowUrl,iconSizeX,iconSizeY,iconAnchorX,iconAnchorY,popupAnchorX,popupAnchorY,tooltipAnchorX,tooltipAnchorY,shadowSizeX,shadowSizeY,lat,lng,popupContent
+icons/Market.webp,icons/Market.webp,icons/shadow.png,60,80,32,52,1,-44,16,-28,41,41,-44.68404,-4.96582,<h3>Marker 1</h3><p>This is the content of marker 1.</p>

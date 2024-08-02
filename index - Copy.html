@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html = style="height: 100%;">
+  <head>
+    <title>Hogsback Adventure Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="scripts/leaflet.css">
+    <script src="scripts/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  </head>
+  <body style="height: 100%;margin: 0;">
+    <div id="map" style="width: 100vw; height: 100%; background: #000000;"></div>
+    <script type="text/javascript">
+
+  //Creating the Map
+    var map = L.map('map').setView([0, 0], 0);
+    L.tileLayer('map/{z}/{x}/{y}.png', {
+      continuousWorld: false,
+      noWrap: true,  
+      minZoom: 3,
+      maxZoom: 5,
+    }).addTo(map);
+  //Coordinate Finder
+    var marker = L.marker([0, 0], {
+      draggable: true,
+    }).addTo(map);
+    marker.bindPopup('LatLng Marker').openPopup();
+    marker.on('dragend', function(e) {
+      marker.getPopup().setContent(marker.getLatLng().toString()).openOn(map);
+    });
+
+ // Load markers from CSV file
+ Papa.parse('markers.csv', {
+    download: true,
+    header: true,
+    complete: function(results) {
+      var markers = results.data;
+      markers.forEach(function(markerData) {
+        var icon = L.icon({
+          iconUrl: markerData.iconUrl,
+          iconRetinaUrl: markerData.iconRetinaUrl,
+          shadowUrl: markerData.shadowUrl,
+          iconSize: [markerData.iconSizeX, markerData.iconSizeY],
+          iconAnchor: [markerData.iconAnchorX, markerData.iconAnchorY],
+          popupAnchor: [markerData.popupAnchorX, markerData.popupAnchorY],
+          tooltipAnchor: [markerData.tooltipAnchorX, markerData.tooltipAnchorY],
+          shadowSize: [markerData.shadowSizeX, markerData.shadowSizeY]
+        });
+        var marker = L.marker([markerData.lat, markerData.lng], { icon: icon }).bindPopup(markerData.popupContent).addTo(map);
+      });
+    }
+  });
+
+
+/*    //Market
+	var Market = L.icon({
+		iconUrl:       'icons/Market.webp',
+		iconRetinaUrl: 'icons/Market.webp',
+		shadowUrl:     'icons/shadow.png',
+		iconSize:    [60, 80],
+		iconAnchor:  [32, 52],
+		popupAnchor: [1, -44],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-44.68404, -4.96582],{icon: Market}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+ 
+     //VIC
+     var VIC = L.icon({
+		iconUrl:       'icons/VIC.webp',
+		iconRetinaUrl: 'icons/VIC.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [35, 51],
+		iconAnchor:  [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-39.54156, -4.262695],{icon: VIC}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+ 
+      //VIC
+      var VIC = L.icon({
+		iconUrl:       'icons/VIC.webp',
+		iconRetinaUrl: 'icons/VIC.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [35, 51],
+		iconAnchor:  [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-39.54156, -4.262695],{icon: VIC}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+ 
+        //AWTF
+        var AWTF = L.icon({
+		iconUrl:       'icons/AWTF.webp',
+		iconRetinaUrl: 'icons/AWTF.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [60, 80],
+		iconAnchor:  [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-52.072884, 8.261719],{icon: AWTF}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+ 
+          //heart-centre
+          var heartcentre = L.icon({
+		iconUrl:       'icons/heartcentre.webp',
+		iconRetinaUrl: 'icons/heartcentre.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [75, 60],
+		iconAnchor:  [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-44.964646, 11.90918],{icon: heartcentre}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+ 
+         //Chocolate Shop
+          var Chocolate = L.icon({
+		iconUrl:       'icons/Chocolate.webp',
+		iconRetinaUrl: 'icons/Chocolate.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [60, 40],
+		iconAnchor:  [12, 31],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-33.468158, 7.053223],{icon: Chocolate}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+  
+    //Archery
+    var Archery = L.icon({
+		iconUrl:       'icons/Archery.webp',
+		iconRetinaUrl: 'icons/Archery.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [60, 50],
+		iconAnchor:  [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-29.702708, 12.65625],{icon: Archery}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+  
+    //RedClay
+    var RedClay = L.icon({
+		iconUrl:       'icons/RedClay.webp',
+		iconRetinaUrl: 'icons/RedClay.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [55, 45],
+		iconAnchor:  [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-26.129165, 6.328125],{icon: RedClay}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+  
+    //Libary
+    var Libary = L.icon({
+		iconUrl:       'icons/Libary.webp',
+		iconRetinaUrl: 'icons/Libary.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [60, 80],
+		iconAnchor:  [10, 80],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-17.40172, 2.109375],{icon: Libary}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+  
+    //Intaba
+    var Intaba = L.icon({
+		iconUrl:       'icons/Intaba.webp',
+		iconRetinaUrl: 'icons/Intaba.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [65, 60],
+		iconAnchor:  [10, 20],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_vic = L.marker([-8.369657, -4.130859],{icon: Intaba}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ').addTo(map);
+  
+  
+    //Cannacopia
+    var Cannacopia = L.icon({
+		iconUrl:       'icons/Cannacopia.webp',
+		iconRetinaUrl: 'icons/Cannacopia.webp',
+		shadowUrl:     'icons/shadow.png',
+    iconSize:    [80, 80],
+		iconAnchor:  [1, 70],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize:  [41, 41]
+  });	
+  var hb_Cannacopia = L.marker([-7.540828, 0.615234],{icon: Cannacopia}).bindPopup('<b>Saturday Markets</b> <hr> <p><img src="icons/Market.png" alt="Trulli" width="100" height="100"></p> There is just a small bit of extra info about the market let me just type some extra text as a test to see what it does  <a href="https://www.w3schools.com/">Visit W3Schools.com!</a> ');
+ 
+
+//Marker Groups
+  var groupCities = L.layerGroup([hb_Cannacopia,Cannacopia]);
+
+//Marker Overlay
+var overlays={
+    "Cities" : groupCities,
+    }
+//GROUP CONTROLS
+L.control.layers(null, overlays).addTo(map);
+ */
+    </script>
+  </body>
+</html>
