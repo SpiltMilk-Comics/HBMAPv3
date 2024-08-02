@@ -45,7 +45,8 @@
         tooltipAnchor: [markerData.tooltipAnchorX, markerData.tooltipAnchorY],
         shadowSize: [markerData.shadowSizeX, markerData.shadowSizeY]
       });
-      var marker = L.marker([markerData.lat, markerData.lng], { icon: icon }).bindPopup(markerData.popupContent).addTo(map);
+      var newMarker = L.marker([markerData.lat, markerData.lng], { icon: icon }).bindPopup(markerData.popupContent).addTo(map);
+      console.log('Popup Content:', markerData.popupContent);
     });
   }
 });
